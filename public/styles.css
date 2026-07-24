@@ -99,6 +99,15 @@ select {
   margin-bottom: 38px;
 }
 
+.deployment-note {
+  grid-column: 1 / -1;
+  margin: 0 0 9px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: 0.01em;
+}
+
 .eyebrow,
 .section-index {
   margin: 0;
