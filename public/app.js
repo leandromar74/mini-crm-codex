@@ -11,6 +11,10 @@ const submitButton = document.querySelector("#submit-button");
 const cancelEditButton = document.querySelector("#cancel-edit-button");
 const formMessage = document.querySelector("#form-message");
 const leadCount = document.querySelector("#lead-count");
+const totalLeads = document.querySelector("#total-leads");
+const newLeads = document.querySelector("#new-leads");
+const contactedLeads = document.querySelector("#contacted-leads");
+const lostLeads = document.querySelector("#lost-leads");
 const searchInput = document.querySelector("#lead-search");
 const statusFilter = document.querySelector("#status-filter");
 const loadingState = document.querySelector("#loading-state");
@@ -82,6 +86,26 @@ function getVisibleLeads() {
 
     return matchesSearch && matchesStatus;
   });
+}
+
+function renderLeadStats(leads) {
+  const counts = leads.reduce(
+    (summary, lead) => {
+      summary.total += 1;
+
+      if (Object.hasOwn(summary, lead.status)) {
+        summary[lead.status] += 1;
+      }
+
+      return summary;
+    },
+    { total: 0, new: 0, contacted: 0, lost: 0 },
+  );
+
+  totalLeads.textContent = counts.total;
+  newLeads.textContent = counts.new;
+  contactedLeads.textContent = counts.contacted;
+  lostLeads.textContent = counts.lost;
 }
 
 function resetFormMode() {
@@ -248,6 +272,7 @@ async function loadLeads() {
 
     const leads = await response.json();
     allLeads = Array.isArray(leads) ? leads : [];
+    renderLeadStats(allLeads);
     searchInput.disabled = false;
     statusFilter.disabled = false;
     applyFilters();
