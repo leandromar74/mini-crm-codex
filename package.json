@@ -1,0 +1,21 @@
+{
+  "name": "mini-crm-api",
+  "version": "1.0.0",
+  "description": "API REST sencilla para gestionar leads de un mini CRM.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [
+    "crm",
+    "leads",
+    "express",
+    "api"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^13.0.1",
+    "express": "^5.1.0"
+  }
+}

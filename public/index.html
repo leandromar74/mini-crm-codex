@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mini CRM para registrar y consultar leads."
+    />
+    <title>Mini CRM</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Ir al inicio de Mini CRM">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span>Mini CRM</span>
+      </a>
+      <div class="api-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        API conectada
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">Panel de leads</p>
+        <h1 id="page-title">Contactos claros, seguimiento sencillo.</h1>
+        <p class="intro-copy">
+          Registra nuevas oportunidades y consulta tu lista de contactos desde
+          un único lugar.
+        </p>
+      </section>
+
+      <section class="workspace" aria-label="Gestión de leads">
+        <aside class="lead-form-panel">
+          <div class="section-heading">
+            <p class="section-index">01</p>
+            <div>
+              <h2 id="form-title">Añadir un lead</h2>
+              <p id="form-description">
+                Introduce los datos básicos del contacto.
+              </p>
+            </div>
+          </div>
+
+          <form id="lead-form" novalidate>
+            <div class="field">
+              <label for="name">Nombre</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                placeholder="Ej. Marina Costa"
+                required
+              />
+              <p class="field-error" id="name-error"></p>
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="marina@empresa.com"
+                required
+              />
+              <p class="field-error" id="email-error"></p>
+            </div>
+
+            <div class="field">
+              <label for="source">Fuente</label>
+              <select id="source" name="source">
+                <option value="">Sin especificar</option>
+                <option value="web">Web</option>
+                <option value="referral">Referido</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="event">Evento</option>
+                <option value="other">Otra</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="status">Estado</label>
+              <select id="status" name="status">
+                <option value="new">Nuevo</option>
+                <option value="contacted">Contactado</option>
+                <option value="lost">Perdido</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button id="submit-button" type="submit">
+                <span>Añadir lead</span>
+                <span aria-hidden="true">→</span>
+              </button>
+              <button
+                id="cancel-edit-button"
+                class="secondary-button"
+                type="button"
+                hidden
+              >
+                Cancelar
+              </button>
+            </div>
+
+            <p id="form-message" class="form-message" aria-live="polite"></p>
+          </form>
+        </aside>
+
+        <section class="leads-panel" aria-labelledby="leads-title">
+          <div class="section-heading leads-heading">
+            <p class="section-index">02</p>
+            <div>
+              <h2 id="leads-title">Leads registrados</h2>
+              <p>Consulta y organiza tus contactos.</p>
+            </div>
+            <a
+              class="export-button"
+              href="/leads/export.csv"
+              download="leads.csv"
+              aria-label="Descargar todos los leads en formato CSV"
+            >
+              <span aria-hidden="true">↓</span>
+              Descargar CSV
+            </a>
+          </div>
+
+          <div class="filters-bar" aria-label="Filtros de leads">
+            <label class="filter-field search-filter" for="lead-search">
+              <span>Buscar</span>
+              <input
+                id="lead-search"
+                type="search"
+                placeholder="Nombre o email"
+                autocomplete="off"
+                aria-controls="leads-table-body"
+                disabled
+              />
+            </label>
+
+            <label class="filter-field status-filter" for="status-filter">
+              <span>Estado</span>
+              <select
+                id="status-filter"
+                aria-controls="leads-table-body"
+                disabled
+              >
+                <option value="all">Todos</option>
+                <option value="new">Nuevos</option>
+                <option value="contacted">Contactados</option>
+                <option value="lost">Perdidos</option>
+              </select>
+            </label>
+
+            <output id="lead-count" class="visible-count" aria-live="polite">
+              Cargando leads...
+            </output>
+          </div>
+
+          <div id="loading-state" class="loading-state" aria-label="Cargando leads">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div id="empty-state" class="empty-state" hidden>
+            <p id="empty-title" class="empty-title">Todavía no hay leads.</p>
+            <p id="empty-copy">
+              Utiliza el formulario para añadir el primer contacto.
+            </p>
+          </div>
+
+          <div id="error-state" class="error-state" role="alert" hidden>
+            No pudimos cargar los leads. Comprueba que la API esté activa.
+          </div>
+
+          <div id="table-wrapper" class="table-wrapper" hidden>
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Fuente</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Registro</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="leads-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
